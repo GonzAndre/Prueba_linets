@@ -18,23 +18,27 @@ def generate_csv(request):
     response = HttpResponse(content_type='text/csv')
     response['Content-Disposition'] = 'attachment; filename=' + '"'+ name + '"'
     writer = csv.writer(response)
+    writer.writerow(['model | name | price | configurations_variations'])
 
     lista = []
     
     product = MasterProductsConfigurable.objects.values('model','sku','price','name','attribute_color').order_by('model')
-    prod = MasterProductsConfigurable.objects.earliest('model')
+    prod_first = MasterProductsConfigurable.objects.values('model','sku','price','name','attribute_color').order_by('model').earliest('model','sku')
+    prod_last = MasterProductsConfigurable.objects.values('model','sku','price','name','attribute_color').order_by('model').latest('model','-sku')
 
-    item_model = prod.model
-    row = prod.model + '|' + prod.name + '|' + prod.sku
+    item_model = prod_first['model']
+    row = prod_first['model'] + '|' + prod_first['name'] + '|' + prod_first['price'] + '| sku=' + prod_first['sku']
 
     for item in product:
         if  item_model == item['model']:
-            row = row + '|' + item['attribute_color']
-            
+            row = row + '| sku=' + item['sku'] + ', color=' + item['attribute_color']
+            if item['sku'] == prod_last['sku']:
+                writer.writerow([row])
+
         else:
             item_model = item['model']
             writer.writerow([row])
-            row = item['model'] + '|' + item['name'] + '|' + item['sku'] + '|' + item['attribute_color']
+            row = item['model'] + '|' + item['name'] + '|' + item['price'] + '| sku=' + item['sku'] + ', color=' + item['attribute_color']
 
     return response
 
