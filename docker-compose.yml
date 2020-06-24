@@ -1,0 +1,27 @@
+version: '2.1'
+
+services:
+  web:
+    build: .
+    image: aplicacion
+    command: python manage.py runserver 0.0.0.0:8080
+    volumes:
+      - .:/code
+    ports:
+      - "8080:8080"
+    environment:
+      NAME: Prueba_linets
+      USER: root
+      PASSWORD: Y8UQNN
+      HOST: db
+  
+  migrate:
+    image: aplicacion
+    command: python  manage.py migrate
+    volumes:
+      - .:/code
+    environment:
+      NAME: Prueba_linets
+      USER: root
+      PASSWORD: Y8UQNN
+      HOST: db
