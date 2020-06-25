@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>añadir producto</title>
+</head>
+<body>
+{% include "navbar.html" %}
+<div class="container">
+    <div class="row">
+        <div class="col-4 mx-auto">
+            <h1>Añadir producto</h1>
+            <div class="card border-primary mb-3" style="max-width: 18rem;">
+                <div class="card-header">se añadirá el producto solo con los atributos principales:</div>
+                <div class="card-body text-primary">
+                    <form action="" method="POST">{% csrf_token %}
+                        {{ product }}
+                        <button type="submit" class="btn btn-primary btn-lg btn-block">Enviar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>   
+</body>
+</html>
