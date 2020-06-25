@@ -5,6 +5,7 @@ from django.contrib import messages
 from django.http import JsonResponse, HttpResponseRedirect, HttpResponse
 import csv
 from django.utils import timezone
+from inventory.forms import MasterProductForm
 
 # Create your views here.
 
@@ -48,9 +49,6 @@ def generate_csv(request):
 
     return response
 
-def home(request):
-    return render(request, 'home.html')
-
 def list_product(request):
     data = {}
     object_list = MasterProductsConfigurable.objects.all().order_by('model')
@@ -63,3 +61,15 @@ def list_product(request):
     except EmptyPage:
         data['object_list'] = paginator.page(paginator.num_pages)
     return render(request, 'list_product.html', data)
+
+def add_product(request):
+    data = {}
+    if request.method == "POST":
+        data['product'] = MasterProductForm(request.POST)
+        if data['product'].is_valid():
+            data['product'].save()
+            return redirect('list_product')
+    else:
+        data['product'] = MasterProductForm()
+    
+    return render(request, 'add_product.html',data)
