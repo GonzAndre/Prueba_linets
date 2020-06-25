@@ -51,3 +51,15 @@ def generate_csv(request):
 def home(request):
     return render(request, 'home.html')
 
+def list_product(request):
+    data = {}
+    object_list = MasterProductsConfigurable.objects.all().order_by('model')
+    paginator = Paginator(object_list, 20)
+    page = request.GET.get('page')
+    try:
+        data['object_list'] = paginator.page(page)
+    except PageNotAnInteger:
+        data['object_list'] = paginator.page(1)
+    except EmptyPage:
+        data['object_list'] = paginator.page(paginator.num_pages)
+    return render(request, 'list_product.html', data)

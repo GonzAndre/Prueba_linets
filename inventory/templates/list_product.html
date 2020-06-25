@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>  
+</head>
+<body>
+    {% include "navbar.html" %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-6 col-md-9 col-lg-9 ">
+                <h1>Inventario</h1>
+            </div>
+            <div class="col-sm-6 col-md-3 col-lg-3">
+                <button type="button" class="btn btn-success" style="margin-top: 10px;">Reporte</button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <table class="table">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">Modelo</th>
+                        <th scope="col">Nombre</th>
+                        <th scope="col">Precio</th>
+                        <th scope="col">color</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in object_list %}
+                      <tr>
+                        <th>{{ item.sku }}</th>
+                        <td>{{ item.model }}</td>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.attribute_color }}</td>
+                      </tr>
+                    {% endfor %}
+                    </tbody>
+                  </table>
+            </div>
+        </div>
+        <div class="row mx-auto">
+          {% if object_list.has_next or object_list.has_previous %}
+              <nav aria-label="Page navigation example">
+                  <ul class="pagination justify-content-center">
+                      {% if object_list_acquisition.has_previous %}
+                          <li class="page-item"><a class="page-link"
+                                                   href="?page={{ object_list.previous_page_number }}">Previous</a>
+                          </li>
+                      {% endif %}
+
+                      {% for page in object_list.paginator.page_range %}
+                          <li class="page-item {% if object_list.number == page %}active{% endif %}">
+                              <a
+                                      class="page-link" href="?page={{ page }}">{{ page }}</a></li>
+                      {% endfor %}
+
+                      {% if object_list.has_next %}
+                          <li class="page-item"><a class="page-link"
+                                                   href="?page={{ object_list.next_page_number }}">Next</a>
+                          </li>
+                      {% endif %}
+                  </ul>
+              </nav>
+          {% endif %}
+        </div>
+    </div>
+</body>
+</html>
