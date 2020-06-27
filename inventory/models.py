@@ -10,7 +10,7 @@ from django.db import models
 class MasterProductsConfigurable(models.Model):
     model = models.CharField(max_length=50, blank=True, null=True)
     group_by_model = models.CharField(max_length=50,blank=True, null=True)
-    sku = models.CharField(max_length=50, primary_key= True)
+    sku = models.CharField(max_length=50, primary_key= True,error_messages={'unique': 'El id del producto ya existe.'})
     yr_es = models.CharField(max_length=50,blank=True, null=True)  # Field name made lowercase.
     yr_fr = models.CharField(max_length=50,blank=True, null=True)  # Field name made lowercase.
     name_single_product = models.CharField(max_length=50,blank=True, null=True)

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from inventory.models import MasterProductsConfigurable
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
@@ -67,8 +67,12 @@ def add_product(request):
     if request.method == "POST":
         data['product'] = MasterProductForm(request.POST)
         if data['product'].is_valid():
-            data['product'].save()
-            return redirect('list_product')
+            if not MasterProductsConfigurable.objects.get(sku=data['product'].sku).exists():
+                data['product'].save()
+                return redirect('list_product')
+            else:
+                messages.error(request,'El id del producto ya existe.')
+
     else:
         data['product'] = MasterProductForm()
     
